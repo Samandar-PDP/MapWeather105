@@ -5,6 +5,8 @@ import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
+import com.sdk.weathermap.model.LocationName
+import com.sdk.weathermap.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val geocoder: Geocoder // dependency inversion
+    private val geocoder: Geocoder, // dependency inversion
+    private val repository: WeatherRepository
 ) : ViewModel() {
     private val _mapState = MutableStateFlow(MapState())
     val mapState get() = _mapState.asStateFlow()
@@ -57,7 +60,6 @@ class MapViewModel @Inject constructor(
 
             is MapEvent.OnMapMoved -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    println("@@@${event.isMoving}")
                     _mapState.update {
                         it.copy(
                             isSomeUIsVisible = event.isMoving
@@ -74,6 +76,12 @@ class MapViewModel @Inject constructor(
                             zoom = it.zoom + 5f
                         )
                     }
+                }
+            }
+
+            is MapEvent.OnSaveLocationName -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.saveLocation(LocationName(0,event.name, false))
                 }
             }
         }

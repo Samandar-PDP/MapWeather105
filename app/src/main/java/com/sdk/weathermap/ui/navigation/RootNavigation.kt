@@ -10,6 +10,7 @@ import com.sdk.weathermap.util.Graph
 @Composable
 fun RootNavigation(navHostController: NavHostController) {
     NavHost(
+        route = Graph.ROOT,
         navController = navHostController,
         startDestination = Graph.MAIN,
     ) {

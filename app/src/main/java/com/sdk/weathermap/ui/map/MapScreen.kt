@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -87,9 +88,13 @@ fun MapScreen(
                 visible = !state.isSomeUIsVisible
             ) {
                 Button(
-                    onClick = { /*TODO*/ }, modifier = Modifier
+                    onClick = {
+                              navHostController.navigate("map_detail")
+                    },
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
+                        .padding(start = 15.dp, end = 15.dp, bottom = 5.dp)
+                        .height(48.dp),
                 ) {
                     Text(text = "Next")
                 }
@@ -99,8 +104,7 @@ fun MapScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             GoogleMap(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
+                    .fillMaxSize(),
                 uiSettings = uiSettings,
                 properties = MapProperties(
                     mapStyleOptions = if (isSystemInDarkTheme()) MapStyleOptions(

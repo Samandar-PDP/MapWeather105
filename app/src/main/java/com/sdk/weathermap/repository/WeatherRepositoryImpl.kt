@@ -2,6 +2,7 @@ package com.sdk.weathermap.repository
 
 import com.sdk.weathermap.database.FavoriteDao
 import com.sdk.weathermap.database.LocationDao
+import com.sdk.weathermap.manager.DataStoreManager
 import com.sdk.weathermap.model.CurrentWeather
 import com.sdk.weathermap.model.FavoriteEntity
 import com.sdk.weathermap.model.LocationName
@@ -13,7 +14,8 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val locationDao: LocationDao,
     private val api: WeatherService,
-    private val favoriteDao: FavoriteDao
+    private val favoriteDao: FavoriteDao,
+    private val dataStoreManager: DataStoreManager
 ) : WeatherRepository {
     override suspend fun saveLocation(locationName: LocationName) {
         locationDao.saveLocation(locationName)
@@ -48,5 +50,13 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override fun getAllFavorites(): Flow<List<FavoriteEntity>> {
         return favoriteDao.getAllFavorites()
+    }
+
+    override suspend fun saveTheme(index: Int) {
+        dataStoreManager.saveTheme(index)
+    }
+
+    override fun getTheme(): Flow<Int> {
+        return dataStoreManager.getTheme()
     }
 }

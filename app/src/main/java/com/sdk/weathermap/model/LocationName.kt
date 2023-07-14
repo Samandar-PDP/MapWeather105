@@ -8,5 +8,6 @@ data class LocationName(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val isSaved: Boolean
+    val isSaved: Boolean,
+    val savedDate: String
 )

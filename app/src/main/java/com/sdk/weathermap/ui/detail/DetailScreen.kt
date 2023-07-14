@@ -55,6 +55,7 @@ fun DetailScreen(
     navHostController: NavHostController,
     id: Int,
     name: String,
+    isView: Boolean,
     vm: DetailViewModel = hiltViewModel()
 ) {
     var isDeleteDialogOpen by remember { mutableStateOf(false) }
@@ -79,10 +80,12 @@ fun DetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        isDeleteDialogOpen = true
-                    }) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "back")
+                    if (isView) {
+                        IconButton(onClick = {
+                            isDeleteDialogOpen = true
+                        }) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "back")
+                        }
                     }
                 }
             )
@@ -106,7 +109,8 @@ fun DetailScreen(
                                     LocationName(
                                         id = id,
                                         name = name,
-                                        isSaved = false
+                                        isSaved = false,
+                                        Graph.getCurrentTime()
                                     )
                                 )
                             )
@@ -126,7 +130,7 @@ fun DetailScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = SimpleDateFormat("EEE,MMM dd", Locale.getDefault()).format(Date()))
+                Text(text = Graph.getCurrentTime())
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),

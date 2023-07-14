@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.sdk.weathermap.database.FavoriteDao
 import com.sdk.weathermap.database.LocationDao
 import com.sdk.weathermap.database.WeatherDatabase
+import com.sdk.weathermap.manager.DataStoreManager
 import com.sdk.weathermap.network.WeatherService
 import com.sdk.weathermap.repository.WeatherRepository
 import com.sdk.weathermap.repository.WeatherRepositoryImpl
@@ -64,8 +65,16 @@ object AppModule {
     fun provideWeatherRepository(
         dao: LocationDao,
         favoriteDao: FavoriteDao,
-        weatherService: WeatherService
+        weatherService: WeatherService,
+        manager: DataStoreManager
     ): WeatherRepository {
-        return WeatherRepositoryImpl(dao, weatherService, favoriteDao)
+        return WeatherRepositoryImpl(dao, weatherService, favoriteDao, manager)
+    }
+    @Provides
+    @Singleton
+    fun provideDataStore(
+        @ApplicationContext context: Context
+    ): DataStoreManager {
+        return DataStoreManager(context)
     }
 }

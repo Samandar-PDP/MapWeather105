@@ -8,14 +8,14 @@ import com.sdk.weathermap.ui.main.MainScreen
 import com.sdk.weathermap.util.Graph
 
 @Composable
-fun RootNavigation(navHostController: NavHostController) {
+fun RootNavigation(navHostController: NavHostController, isDark: Boolean) {
     NavHost(
         route = Graph.ROOT,
         navController = navHostController,
         startDestination = Graph.MAIN,
     ) {
         composable(route = Graph.MAIN) {
-            MainScreen()
+            MainScreen(isDark = isDark)
         }
     }
 }

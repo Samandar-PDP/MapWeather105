@@ -15,4 +15,7 @@ interface WeatherRepository {
     suspend fun saveFavorite(favoriteEntity: FavoriteEntity)
     suspend fun deleteFavorite(name: String)
     fun getAllFavorites(): Flow<List<FavoriteEntity>>
+
+    suspend fun saveTheme(index: Int)
+    fun getTheme(): Flow<Int>
 }

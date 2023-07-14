@@ -42,7 +42,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun MapScreen(
     navHostController: NavHostController,
-    vm: MapViewModel = hiltViewModel()
+    vm: MapViewModel = hiltViewModel(),
+    isDark: Boolean
 ) {
     val state by vm.mapState.collectAsState()
     val scope = rememberCoroutineScope()
@@ -55,7 +56,7 @@ fun MapScreen(
         position = CameraPosition.fromLatLngZoom(state.currentLocation, state.zoom)
     }
     LaunchedEffect(key1 = cameraPositionState.isMoving) {
-        vm.onEvent(MapEvent.OnMapMoved(cameraPositionState.isMoving))
+           vm.onEvent(MapEvent.OnMapMoved(cameraPositionState.isMoving))
     }
 
     if (isSearched) {
@@ -107,7 +108,7 @@ fun MapScreen(
                     .fillMaxSize(),
                 uiSettings = uiSettings,
                 properties = MapProperties(
-                    mapStyleOptions = if (isSystemInDarkTheme()) MapStyleOptions(
+                    mapStyleOptions = if (isDark) MapStyleOptions(
                         MapStyle.darkMap
                     ) else
                         null

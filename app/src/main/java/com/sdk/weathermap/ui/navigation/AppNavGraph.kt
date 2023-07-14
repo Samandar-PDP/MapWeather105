@@ -18,12 +18,14 @@ import com.sdk.weathermap.ui.detail.DetailScreen
 import com.sdk.weathermap.ui.map.MapDetailScreen
 import com.sdk.weathermap.ui.map.MapScreen
 import com.sdk.weathermap.ui.map.MapViewModel
+import com.sdk.weathermap.ui.settings.SettingScreen
 import com.sdk.weathermap.util.Graph
 
 @Composable
 fun MainGraph(
     modifier: Modifier,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    isDark: Boolean
 ) {
     NavHost(
         modifier = modifier,
@@ -37,20 +39,20 @@ fun MainGraph(
           FavoriteScreen(navHostController = navHostController)
         }
         composable(route = BottomBar.Settings.route) {
-            Text(text = "Settings")
+            SettingScreen()
         }
-        mapGraph(navHostController)
+        mapGraph(navHostController, isDark)
         detailGraph(navHostController)
     }
 }
 
-fun NavGraphBuilder.mapGraph(navHostController: NavHostController) {
+fun NavGraphBuilder.mapGraph(navHostController: NavHostController, isDark: Boolean) {
     navigation(
         startDestination = "map_screen",
         route = Graph.MAP
     ) {
         composable(route= "map_screen") {
-            MapScreen(navHostController = navHostController)
+            MapScreen(navHostController = navHostController, isDark = isDark)
         }
         composable(route = "map_detail") {
             MapDetailScreen(navHostController = navHostController)
@@ -60,7 +62,7 @@ fun NavGraphBuilder.mapGraph(navHostController: NavHostController) {
 
 fun NavGraphBuilder.detailGraph(navHostController: NavHostController){
     navigation(
-        route = "${Graph.DETAIL}/{id}/{name}",
+        route = "${Graph.DETAIL}/{id}/{name}/{is_view}",
         startDestination = "detail_screen"
     ) {
         composable(
@@ -75,12 +77,18 @@ fun NavGraphBuilder.detailGraph(navHostController: NavHostController){
                     name = "name"
                 ) {
                     type = NavType.StringType
-                }
+                },
+                navArgument(
+                    name = "is_view"
+                ) {
+                    type = NavType.StringType
+                },
             )
         ) {
             val id = it.arguments?.getString("id") ?: "0"
             val name = it.arguments?.getString("name") ?: "Andijan"
-            DetailScreen(navHostController = navHostController, id = id.toInt(), name = name)
+            val isView = it.arguments?.getString("is_view") ?: "false"
+            DetailScreen(navHostController = navHostController, id = id.toInt(), name = name,isView = isView.toBoolean())
         }
     }
 }

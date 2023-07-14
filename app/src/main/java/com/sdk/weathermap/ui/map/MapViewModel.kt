@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.sdk.weathermap.model.LocationName
 import com.sdk.weathermap.repository.WeatherRepository
+import com.sdk.weathermap.util.Graph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,7 +82,14 @@ class MapViewModel @Inject constructor(
 
             is MapEvent.OnSaveLocationName -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.saveLocation(LocationName(0,event.name, false))
+                    repository.saveLocation(
+                        LocationName(
+                            0,
+                            event.name,
+                            false,
+                            Graph.getCurrentTime()
+                        )
+                    )
                 }
             }
         }

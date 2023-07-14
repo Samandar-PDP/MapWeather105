@@ -23,7 +23,7 @@ import com.sdk.weathermap.util.Graph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navHostController: NavHostController = rememberNavController()) {
+fun MainScreen(navHostController: NavHostController = rememberNavController(), isDark: Boolean) {
     val current by navHostController.currentBackStackEntryAsState()
 
     Scaffold(
@@ -43,7 +43,8 @@ fun MainScreen(navHostController: NavHostController = rememberNavController()) {
     ) { padding ->
         MainGraph(
             modifier = Modifier.padding(padding),
-            navHostController = navHostController
+            navHostController = navHostController,
+            isDark = isDark
         )
     }
 }

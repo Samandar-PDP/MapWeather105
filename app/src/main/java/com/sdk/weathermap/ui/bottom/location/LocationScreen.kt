@@ -1,6 +1,7 @@
 package com.sdk.weathermap.ui.bottom.location
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.sdk.weathermap.model.LocationName
@@ -45,7 +47,7 @@ fun LocationScreen(
             LocationItem(
                 locationName = it,
                 onItemClick = { l ->
-                    navHostController.navigate("${Graph.DETAIL}/${it.id}/${l.name}")
+                    navHostController.navigate("${Graph.DETAIL}/${it.id}/${l.name}/true")
                 },
                 onFavoriteClick = { l ->
                     viewModel.changeFavorite(l)
@@ -72,15 +74,22 @@ fun LocationItem(
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = locationName.name,
-            modifier = Modifier.fillMaxWidth(.9f),
+            fontSize = 25.sp,
+            modifier = Modifier.fillMaxWidth(.8f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        IconButton(onClick = { onFavoriteClick(locationName) }) {
-            Icon(
-                imageVector = if (locationName.isSaved) Icons.Default.Favorite else Icons.Outlined.Favorite,
-                contentDescription = "icon",
-                tint = if (locationName.isSaved) Color.Red else Color.Black.copy(alpha = .5f)
+        Column {
+            IconButton(onClick = { onFavoriteClick(locationName) }) {
+                Icon(
+                    imageVector = if (locationName.isSaved) Icons.Default.Favorite else Icons.Outlined.Favorite,
+                    contentDescription = "icon",
+                    tint = if (locationName.isSaved) Color.Red else Color.Black.copy(alpha = .5f)
+                )
+            }
+            Text(
+                text = locationName.savedDate,
+                fontSize = 12.sp
             )
         }
     }

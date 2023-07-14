@@ -15,10 +15,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,28 +35,41 @@ import androidx.navigation.NavHostController
 import com.sdk.weathermap.model.LocationName
 import com.sdk.weathermap.util.Graph
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationScreen(
     viewModel: LocationViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(10.dp)
-    ) {
-        items(
-            items = viewModel.locationList,
-            key = { it.id }
+    var query by remember { mutableStateOf("") }
+    Column {
+        OutlinedTextField(
+            value = query,
+            onValueChange = {
+                query = it
+                viewModel.onSearch(query)
+            },
+            modifier = Modifier.fillMaxWidth(),
+
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(10.dp)
         ) {
-            LocationItem(
-                locationName = it,
-                onItemClick = { l ->
-                    navHostController.navigate("${Graph.DETAIL}/${it.id}/${l.name}/true")
-                },
-                onFavoriteClick = { l ->
-                    viewModel.changeFavorite(l)
-                }
-            )
+            items(
+                items = viewModel.locationList,
+                key = { it.id }
+            ) {
+                LocationItem(
+                    locationName = it,
+                    onItemClick = { l ->
+                        navHostController.navigate("${Graph.DETAIL}/${it.id}/${l.name}/true")
+                    },
+                    onFavoriteClick = { l ->
+                        viewModel.changeFavorite(l)
+                    }
+                )
+            }
         }
     }
 }
